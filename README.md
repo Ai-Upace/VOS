@@ -2,7 +2,7 @@
 
 ---
 
-VOS (Virtual Operating System) is a small project, thank for many contributors🤝
+VOS (V Operating System) is a small project, thank for many contributors🤝
 
 ## Thanks
 
