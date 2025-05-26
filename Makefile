@@ -26,8 +26,7 @@ run: os.img
 
 clean_W:
 # Windows Vistion
-	del /Q BIN\*.bin
-	del /Q BIN\*.o
+	del /Q BIN\*.*
 	del /Q os.img
 
 clean_L:
