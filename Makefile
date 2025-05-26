@@ -24,7 +24,15 @@ kernel.bin: SOURCE/kernel_entry.asm SOURCE/kernel.c
 run: os.img
 	qemu-system-i386 -fda os.img
 
-clean:
+clean_W:
 # Windows Vistion
 	del /Q BIN\*.bin
 	del /Q BIN\*.o
+	del /Q os.img
+
+clean_L:
+# Linux Vistion
+	rm -f BIN/*.bin
+	rm -f BIN/*.o
+	rm -f BIN/*.elf
+	rm -f os.img
