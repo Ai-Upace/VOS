@@ -9,29 +9,27 @@ all: os.img
 
 os.img: boot.bin kernel.bin
 	$(DD) if=/dev/zero of=os.img bs=512 count=2880
-	$(DD) if=BIN/boot.bin of=os.img bs=512 count=1 conv=notrunc
-	$(DD) if=BIN/kernel.bin of=os.img bs=512 seek=1 conv=notrunc
+	$(DD) if=build/boot.bin of=os.img bs=512 count=1 conv=notrunc
+	$(DD) if=build/kernel.bin of=os.img bs=512 seek=1 conv=notrunc
 
-boot.bin: SOURCE/BOOT.ASM
-	$(ASM) -f bin SOURCE/BOOT.ASM -o BIN/boot.bin
+boot.bin: src/BOOT.ASM
+	$(ASM) -f bin src/BOOT.ASM -o build/boot.bin
 
-kernel.bin: SOURCE/kernel_entry.asm SOURCE/kernel.c
-	$(ASM) -f elf32 SOURCE/kernel_entry.asm -o BIN/kernel_entry.o
-	$(gcc) $(not) -c SOURCE/kernel.c -o BIN/kernel.o
-	$(ld) -Ttext 0x10000 -o BIN/kernel.elf BIN/kernel_entry.o BIN/kernel.o
-	$(objcopy) -O binary BIN/kernel.elf BIN/kernel.bin
+kernel.bin: src/kernel_entry.asm src/kernel.c
+	$(ASM) -f elf32 src/kernel_entry.asm -o build/kernel_entry.o
+	$(gcc) $(not) -c src/kernel.c -o build/kernel.o
+	$(ld) -Ttext 0x10000 -o build/kernel.elf build/kernel_entry.o build/kernel.o
+	$(objcopy) -O binary build/kernel.elf build/kernel.bin
 
 run: os.img
 	qemu-system-i386 -fda os.img
 
 clean_W:
 # Windows Vistion
-	del /Q BIN\*.*
+	del /Q build\*.*
 	del /Q os.img
 
 clean_L:
 # Linux Vistion
-	rm -f BIN/*.bin
-	rm -f BIN/*.o
-	rm -f BIN/*.elf
+	rm -f build/*.*
 	rm -f os.img
