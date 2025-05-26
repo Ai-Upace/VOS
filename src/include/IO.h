@@ -1,3 +1,4 @@
+#pragma once
 #ifdef IO_H
 #define IO_H
 

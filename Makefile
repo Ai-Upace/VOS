@@ -1,41 +1,51 @@
-ASM= nasm
-DD = dd
-gcc= i686-elf-gcc
-ld = i686-elf-ld
-not=-ffreestanding -nostdlib
-objcopy = i686-elf-objcopy
+ASM      := nasm
+DD       := dd
+GCC      := i686-elf-gcc
+LD       := i686-elf-ld
+OBJCOPY  := i686-elf-objcopy
+CFLAGS   := -ffreestanding -nostdlib -I$(INC_DIR) -Wall -Wextra
+LDFLAGS  := -Ttext 0x10000 -nostdlib
+
+BUILD_DIR := build
+ASM_DIR   := src/assembly
+INC_DIR   := src/include
+SRC_DIR   := src/kernels
 
 all: os.img
 
-os.img: boot.bin kernel.bin
-# Make floppy disk image
-	$(DD) if=/dev/zero of=os.img bs=512 count=2880
-# Write objects to the image
-	$(DD) if=build/boot.bin of=os.img bs=512 count=1 conv=notrunc
-	$(DD) if=build/kernel.bin of=os.img bs=512 seek=1 conv=notrunc
+os.img: $(BUILD_DIR)/boot.bin $(BUILD_DIR)/kernel.bin
 
-boot.bin: src/BOOT.ASM
-	$(ASM) -f bin src/BOOT.ASM -o build/boot.bin
+	$(DD) if=/dev/zero of=$@ bs=512 count=2880
 
-kernel.bin: src/kernel_entry.asm src/kernel.c
-# Build the kernel object
-	$(ASM) -f elf32 src/kernel_entry.asm -o build/kernel_entry.o
-	$(gcc) $(not) -c src/kernel.c -o build/kernel.o
-# Link the kernel object
-	$(ld) -Ttext 0x10000 -o build/kernel.elf build/kernel_entry.o build/kernel.o
-	$(objcopy) -O binary build/kernel.elf build/kernel.bin
+	$(DD) if=$(BUILD_DIR)/boot.bin of=$@ bs=512 count=1 conv=notrunc
+
+	$(DD) if=$(BUILD_DIR)/kernel.bin of=$@ bs=512 seek=1 conv=notrunc
+
+$(BUILD_DIR)/boot.bin: $(ASM_DIR)/BOOT.ASM | $(BUILD_DIR)
+
+	$(ASM) -f bin $< -o $@
+
+$(BUILD_DIR)/kernel.bin: $(ASM_DIR)/kernel_entry.asm $(SRC_DIR)/kernel.c | $(BUILD_DIR)
+
+	$(ASM) -f elf32 $(ASM_DIR)/kernel_entry.asm -o $(BUILD_DIR)/kernel_entry.o
+	$(GCC) $(CFLAGS) -c $(SRC_DIR)/kernel.c -o $(BUILD_DIR)/kernel.o
+
+	$(LD) $(LDFLAGS) -o $(BUILD_DIR)/kernel.elf $(BUILD_DIR)/kernel_entry.o $(BUILD_DIR)/kernel.o
+	$(OBJCOPY) -O binary $(BUILD_DIR)/kernel.elf $@
+
+$(BUILD_DIR):
+
+	@mkdir -p $@
 
 run: os.img
-	qemu-system-i386 -fda os.img
+	qemu-system-i386 -fda $<
 
-clean_W:
-# Windows Vistion
-	del /Q build\*.*
-	del /Q os.img
+clean:
+ifeq ($(OS),Windows_NT)
+	@if exist "$(BUILD_DIR)" rd /s /q "$(BUILD_DIR)"
+	@if exist "os.img" del /q "os.img"
+else
+	@rm -rf $(BUILD_DIR) os.img
+endif
 
-clean_L:
-# Linux Vistion
-	rm -f build/*.bin
-	rm -f build/*.o
-	rm -f build/*.elf
-	rm -f os.img
+.PHONY: all run clean

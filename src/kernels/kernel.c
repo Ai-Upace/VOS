@@ -1,4 +1,4 @@
-#include "IO.h"
+#include "../include/IO.h"
 
 // Write a byte to an I/O port
 static inline void outb(unsigned short port, unsigned char val) {
@@ -71,7 +71,7 @@ void shell() {
     char buf[128];
     while (1) {
         puts("> ");
-        int i = 0;
+        long unsigned int i = 0;
         char c;
         while ((c = getchar()) != '\n') {
             if (c == '\b' && i > 0) {
