@@ -2,7 +2,7 @@
 
 ---
 
-VOS (V Operating System) is a small project, thank for many contributors🤝
+VOS (Visual Operating System) is a small project, thank for many contributors🤝
 
 ## How to Use?
 
