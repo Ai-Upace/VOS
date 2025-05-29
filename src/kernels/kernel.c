@@ -60,14 +60,14 @@ char getchar() {
 
 static int cursor_x = 0, cursor_y = 0;
 
-void putchar(char c) {
+void putchar(char c, int color) {
     volatile char *video = (volatile char*)VGA_ADDRESS;
     if (c == '\n') {
         cursor_x = 0; cursor_y++;
     } else {
         int pos = 2 * (cursor_y * VGA_WIDTH + cursor_x);
         video[pos] = c;
-        video[pos+1] = 0x07; // light gray on black
+        video[pos+1] = color; // function color (in 'void putchar(char c, int color)' --> int color)
         cursor_x++;
     }
     if (cursor_x >= VGA_WIDTH) {
@@ -78,33 +78,35 @@ void putchar(char c) {
     }
 }
 
-void puts(const char* s) { while (*s) putchar(*s++); }
+void puts(const char* s, int color, ...) { while (*s) putchar(*s++, color); }
 
 void shell() {
     char buf[128];
     while (1) {
-        puts("> ");
+        puts("> ", 0x07);
         long unsigned int i = 0;
         char c;
         while ((c = getchar()) != '\n') {
             if (c == '\b' && i > 0) {
                 i--;
-                putchar('\b');
-                putchar(' ');
-                putchar('\b');
+                putchar('\b', 0x07);
+                putchar(' ', 0x07);
+                putchar('\b',0x07);
             } else if (i < sizeof(buf)-1 && c >= ' ') {
                 buf[i++] = c;
-                putchar(c);
+                putchar(c, 0x07);
             }
         }
         buf[i] = 0;
-        putchar('\n');
+        putchar('\n', 0x07);
         // More commands
     }
 }
 
 void main() {  
-    putchar(getchar()); // Test getchar
+    puts("Hello World!", 0x7F);
+
+    putchar(getchar(), 0x07); // Test getchar
 
     shell(); 
 
