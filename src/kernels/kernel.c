@@ -27,18 +27,31 @@ char scancode_ascii[] = {
     0, 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', '`',           // 0x1E
     0, '\\', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 0,             // 0x2C
     '*', 0, ' ', 0,                                                           // 0x36
-    // ... (fill out as needed)
+    // more but future ...
 };
 
-char getchar() {
-    unsigned char scancode = 0;
-    while (1) {
-        scancode = inb(0x60);
-        // Key press only: high bit not set
-        if (scancode < sizeof(scancode_ascii) && scancode_ascii[scancode]) {
-            return scancode_ascii[scancode];
-        }
-    }
+char getchar() {  
+    static int shift_pressed = 0;  
+    while (1) {  
+        // wait for a key press 
+        while ((inb(0x64) & 0x01) == 0) asm("pause");  
+        
+        unsigned char scancode = inb(0x60);  
+        
+        // Skip release events and control keys 
+        if (scancode & 0x80) continue;  
+        if (scancode == 0x2A || scancode == 0x36) {  
+            shift_pressed = 1;  
+            continue;  
+        }  
+        if (scancode >= sizeof(scancode_ascii) || !scancode_ascii[scancode]) {  
+            continue;  
+        }  
+        
+        // Handle shift key release
+        char c = scancode_ascii[scancode];  
+        return (shift_pressed && c >= 'a' && c <= 'z') ? c - 32 : c;  
+    }  
 }
 
 #define VGA_ADDRESS 0xB8000
@@ -91,8 +104,7 @@ void shell() {
 }
 
 void main() {  
-    puts("Hello, World!\n");
-    puts("Press any key to continue...\n");
+    putchar(getchar()); // Test getchar
 
     shell(); 
 
