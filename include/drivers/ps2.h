@@ -29,16 +29,17 @@
  * <jntmngmhahayo@gmail.com>
  * 
  */
+#pragma once
+#ifndef PS2_H
+#define PS2_H
+#include "../IO.h"
 
-#include "include/IO.h"
-#include "include/drivers/ps2.h"
+#define VGA_ADDRESS 0xB8000
+#define VGA_WIDTH 80
+#define VGA_HEIGHT 25
 
-void main() {  
-    puts("Hello World!", 0x7F);
+char getchar();
+void putchar(char c, int color);
+void puts(const char* s, int color, ...);
 
-    putchar(getchar(), 0x07); // Test getchar
-
-    shell(); 
-
-    while (1);  // halt
-}  
+#endif

@@ -29,16 +29,3 @@
  * <jntmngmhahayo@gmail.com>
  * 
  */
-
-#include "include/IO.h"
-#include "include/drivers/ps2.h"
-
-void main() {  
-    puts("Hello World!", 0x7F);
-
-    putchar(getchar(), 0x07); // Test getchar
-
-    shell(); 
-
-    while (1);  // halt
-}  

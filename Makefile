@@ -9,7 +9,7 @@ LDFLAGS_grub  := -Ttext 0x1000000 -nostdlib
 
 BUILD_DIR := build
 ASM_DIR   := src/assembly
-INC_DIR   := src/include
+INC_DIR   := include
 SRC_DIR   := src/kernels
 
 all: os.img

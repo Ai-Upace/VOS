@@ -29,16 +29,9 @@
  * <jntmngmhahayo@gmail.com>
  * 
  */
+#ifndef SHELL_H
+#define SHELL_H
 
-#include "include/IO.h"
-#include "include/drivers/ps2.h"
+void shell();
 
-void main() {  
-    puts("Hello World!", 0x7F);
-
-    putchar(getchar(), 0x07); // Test getchar
-
-    shell(); 
-
-    while (1);  // halt
-}  
+#endif

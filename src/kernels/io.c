@@ -29,16 +29,24 @@
  * <jntmngmhahayo@gmail.com>
  * 
  */
-
 #include "include/IO.h"
-#include "include/drivers/ps2.h"
 
-void main() {  
-    puts("Hello World!", 0x7F);
+// Write a byte to an I/O port
+static inline void outb(unsigned short port, unsigned char val) {
+    __asm__ volatile (
+        "outb %0, %1"
+        :
+        : "a"(val), "Nd"(port)
+    );
+}
 
-    putchar(getchar(), 0x07); // Test getchar
-
-    shell(); 
-
-    while (1);  // halt
-}  
+// Read a byte from an I/O port
+static inline unsigned char inb(unsigned short port) {
+    unsigned char ret;
+    __asm__ volatile (
+        "inb %1, %0"
+        : "=a"(ret)
+        : "Nd"(port)
+    );
+    return ret;
+}
