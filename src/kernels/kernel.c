@@ -78,7 +78,9 @@ void putchar(char c, int color) {
     }
 }
 
-void puts(const char* s, int color, ...) { while (*s) putchar(*s++, color); }
+void puts(const char* s, int color, ...) { 
+    while (*s) putchar(*s++, color); 
+}
 
 void shell() {
     char buf[128];
