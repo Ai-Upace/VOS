@@ -30,7 +30,7 @@
  * 
  */
 
-#include "include/IO.h"
+#include "IO.h"
 #include "drivers/ps2.h"
 
 void main() {  
