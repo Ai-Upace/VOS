@@ -29,7 +29,7 @@
  * <jntmngmhahayo@gmail.com>
  * 
  */
-#include "include/user/shell.h"
+#include "user/shell.h"
  void shell() {
     char buf[128];
     while (1) {

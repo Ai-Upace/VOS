@@ -29,7 +29,7 @@
  * <jntmngmhahayo@gmail.com>
  * 
  */
-#include "include/IO.h"
+#include "IO.h"
 #include "drivers/ps2.h"
 // Scancode to ASCII
 char scancode_ascii[] = {

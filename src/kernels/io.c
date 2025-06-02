@@ -29,7 +29,7 @@
  * <jntmngmhahayo@gmail.com>
  * 
  */
-#include "include/IO.h"
+#include "IO.h"
 
 // Write a byte to an I/O port
 static inline void outb(unsigned short port, unsigned char val) {
