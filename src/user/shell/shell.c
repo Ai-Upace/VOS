@@ -29,6 +29,8 @@
  * <jntmngmhahayo@gmail.com>
  * 
  */
+#include "IO.h"
+#include "drivers/ps2.h"
 #include "user/shell.h"
  void shell() {
     char buf[128];

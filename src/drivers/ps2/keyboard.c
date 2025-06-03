@@ -31,6 +31,18 @@
  */
 #include "IO.h"
 #include "drivers/ps2.h"
+
+// Read a byte from an I/O port
+static inline unsigned char inb(unsigned short port) {
+    unsigned char ret;
+    __asm__ volatile (
+        "inb %1, %0"
+        : "=a"(ret)
+        : "Nd"(port)
+    );
+    return ret;
+}
+
 // Scancode to ASCII
 char scancode_ascii[] = {
     0,  27, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b', // 0x0

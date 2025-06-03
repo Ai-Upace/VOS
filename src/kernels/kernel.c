@@ -32,6 +32,7 @@
 
 #include "IO.h"
 #include "drivers/ps2.h"
+#include "user/shell.h"
 
 void main() {  
     puts("Hello World!", 0x7F);
