@@ -2,10 +2,12 @@ ASM		:= nasm
 DD		:= dd
 CC		:= i686-elf-gcc
 LD		:= i686-elf-ld
-CFLAGS	:= -ffreestanding -Wall -I$(INC_DIR) -Wextra -nostdlib
-LDFLAGS := -Ttext 0x10000 -nostdlib
+
 SRC_DIR := src/drivers/ps2/keyboard.c src/kernels/kernel.c src/kernels/io.c src/user/shell/shell.c
 INC_DIR := include
+
+CFLAGS	:= -ffreestanding -Wall -I$(INC_DIR) -Wextra -nostdlib
+LDFLAGS := -Ttext 0x10000 -nostdlib
 
 all: build/kernel.elf
 
