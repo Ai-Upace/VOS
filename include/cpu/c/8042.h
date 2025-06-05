@@ -29,6 +29,42 @@
  * <jntmngmhahayo@gmail.com>
  * 
  */
-// TODO: 8042 controller
-#include "IO.h"
-#include "cpu/c/8042.h"
+#ifndef _CPU_C_8042_H
+#define _CPU_C_8042_H
+#include <stdint.h>
+// 初始化8042控制器
+void i8042_init(void);
+
+// 检查8042输入缓冲区是否为空
+int i8042_input_buffer_empty(void);
+
+// 检查8042输出缓冲区是否有数据
+int i8042_output_buffer_full(void);
+
+// 发送命令到8042
+void i8042_send_command(uint8_t cmd);
+
+// 发送数据到8042
+void i8042_send_data(uint8_t data);
+
+// 从8042读取数据
+uint8_t i8042_read_data(void);
+
+// 复位键盘
+void i8042_keyboard_reset(void);
+
+// 启用/禁用键盘
+void i8042_keyboard_enable(void);
+void i8042_keyboard_disable(void);
+
+// 启用/禁用鼠标
+void i8042_mouse_enable(void);
+void i8042_mouse_disable(void);
+
+// 发送命令到鼠标
+void i8042_send_mouse_command(uint8_t cmd);
+
+// 检查8042控制器状态
+uint8_t i8042_read_status(void);
+
+#endif // _CPU_C_8042_H
