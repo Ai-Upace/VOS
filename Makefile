@@ -10,10 +10,13 @@ INC_DIR := include
 CFLAGS	:= -ffreestanding -Wall -I$(INC_DIR) -Wextra -nostdlib
 LDFLAGS := -Ttext 0x10000 -nostdlib -e _start
 
-all: build/kernel.elf
+all: build/os.img
+
+build/boot.bin: src/assembly/BOOT.ASM
+	$(ASM) -f bin $< -o $@
 
 build/kernel_entry.o: src/assembly/kernel_entry.asm
-	$(ASM) -f elf32 src/assembly/kernel_entry.asm -o build/kernel_entry.o
+	$(ASM) -f elf32 $< -o $@
 
 build/keyboard.o: src/drivers/ps2/keyboard.c
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -29,6 +32,14 @@ build/shell.o: src/user/shell/shell.c
 
 build/kernel.elf: build/kernel_entry.o $(OBJ_FILES)
 	$(LD) $(LDFLAGS) -o $@ build/kernel_entry.o $(OBJ_FILES)
+
+build/os.img: build/boot.bin build/kernel.elf
+	$(DD) if=/dev/zero of=$@ bs=512 count=2880
+	$(DD) if=build/boot.bin of=$@ bs=512 count=1 conv=notrunc
+	$(DD) if=build/kernel.elf of=$@ bs=512 seek=1 conv=notrunc
+
+run: build/os.img
+	qemu-system-i386 -fda build/os.img
 
 clean:
 	rm -rf build/*.o build/kernel.elf
