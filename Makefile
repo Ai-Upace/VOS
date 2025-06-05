@@ -33,10 +33,13 @@ build/shell.o: src/user/shell/shell.c
 build/kernel.elf: build/kernel_entry.o $(OBJ_FILES)
 	$(LD) $(LDFLAGS) -o $@ build/kernel_entry.o $(OBJ_FILES)
 
-build/os.img: build/boot.bin build/kernel.elf
+build/kernel.bin: build/kernel.elf
+	objcopy -O binary $< $@
+
+build/os.img: build/boot.bin build/kernel.bin
 	$(DD) if=/dev/zero of=$@ bs=512 count=2880
 	$(DD) if=build/boot.bin of=$@ bs=512 count=1 conv=notrunc
-	$(DD) if=build/kernel.elf of=$@ bs=512 seek=1 conv=notrunc
+	$(DD) if=build/kernel.bin of=$@ bs=512 seek=1 conv=notrunc
 
 run: build/os.img
 	qemu-system-i386 -fda build/os.img
