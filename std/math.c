@@ -20,16 +20,10 @@
  * <jntmngmhahayo@gmail.com>
  * 
  */
-#pragma once
-#ifndef MATH_H
-#define MATH_H
+#include "libc/math.h"
 
-#define M_PI 3.14159265358979323846
+// TODO: sin, cos, tan, sqrt, abs functions implementation
 
-double sin(double x);
-double cos(double x);
-double tan(double x);
-double sqrt(double x);
-int abs(int x);
-
-#endif
+int abs(int x) {
+    return (x < 0) ? -x : x;
+}
