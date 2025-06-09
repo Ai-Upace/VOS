@@ -58,6 +58,7 @@ char scancode_ascii[] = {
     // more but future ...
 };
 
+// simple getchar function
 char getchar() {  
     static int shift_pressed = 0;  
     while (1) {  
