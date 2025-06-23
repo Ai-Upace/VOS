@@ -30,7 +30,7 @@
 #define VGA_HEIGHT 25
 
 char getchar();
-void putchar(char c, int color);
-void puts(const char* s, int color, ...);
+void putchar(const char c, const int color);
+void puts(const char* s, const int color, ...);
 
 #endif

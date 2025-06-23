@@ -32,5 +32,7 @@ void main() {
 
     shell(); 
 
-    while (1);  // halt
-}  
+    while (1) {
+        asm volatile("hlt");
+    }
+}

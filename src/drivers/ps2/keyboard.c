@@ -85,7 +85,7 @@ char getchar() {
 
 static int cursor_x = 0, cursor_y = 0;
 
-void putchar(char c, int color) {
+void putchar(const char c, const int color) {
     volatile char *video = (volatile char*)VGA_ADDRESS;
     if (c == '\n') {
         cursor_x = 0; cursor_y++;
@@ -103,7 +103,7 @@ void putchar(char c, int color) {
     }
 }
 
-void puts(const char* s, int color, ...) { 
+void puts(const char* s, const int color, ...) {
     while (*s) putchar(*s++, color); 
 }
 
