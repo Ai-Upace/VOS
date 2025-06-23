@@ -21,7 +21,6 @@
  * 
  */
 
-#include "IO.h"
 #include "drivers/ps2.h"
 #include "user/shell.h"
 
