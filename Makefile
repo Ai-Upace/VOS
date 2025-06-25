@@ -4,7 +4,7 @@ CC		:= i686-elf-gcc
 LD		:= i686-elf-ld
 
 SRC_FILES := src/drivers/ps2/keyboard.c src/kernels/kernel.c src/kernels/io.c src/user/shell/shell.c src/user/shell/command.c
-OBJ_FILES := build/keyboard.o build/kernel.o build/io.o build/shell.o
+OBJ_FILES := build/keyboard.o build/kernel.o build/io.o build/shell.o build/cmd.o
 INC_DIR := include
 
 CFLAGS	:= -ffreestanding -Wall -I$(INC_DIR) -Wextra -nostdlib
@@ -28,6 +28,9 @@ build/io.o: src/kernels/io.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 build/shell.o: src/user/shell/shell.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+build/cmd.o: src/user/shell/command.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 build/kernel.elf: build/kernel_entry.o $(OBJ_FILES)

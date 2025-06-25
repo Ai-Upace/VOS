@@ -1,15 +1,17 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
-struct Command {
+typedef struct Command {
     const char *command;
-    void (*handler)(int argc, char** argv);
+    int (*handler)(int argc, char** argv);
     const char* description;
-};
+} CommandEntry;
 
-extern struct Command commands_table[] = {
-    {"help", help_handler},
-    {"dd", dd_handler},
-};
+int dd_handler(int argc, char** argv);
+int help_handler(int argc, char** argv);
+int ls_handler(int argc, char** argv);
+int cat_handler(int argc, char** argv);
+
+extern CommandEntry commands_table[];
 
 #endif //COMMAND_H

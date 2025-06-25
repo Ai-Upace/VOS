@@ -35,8 +35,9 @@ void main() {
         puts("yes!", 0x07);
     } else puts("no!", 0x07);
 
-    // shell();
+    shell();
 
+    // old: while (1);
     while (1) {
         asm volatile("hlt");
     }
