@@ -2,12 +2,12 @@
 
 ---
 
-VOS (Visual Operating System) is a small project, thank for many contributors🤝
+VOS (Visual Operating System) is a small project, thanks for many contributors🤝
 
 ## How to Use?
 
 You should:
-- NASM Assember
+- NASM Assembler
 - make tool
 - Qemu VM
 - Git
@@ -16,6 +16,7 @@ You should:
 This is way:
 ```git
 git clone https://github.com/Ai-Upace/VOS
+git pull --tags origin main
 ```
 Then:
 ```Makefile
