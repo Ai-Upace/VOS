@@ -22,20 +22,11 @@
  */
 #include "IO.h"
 #include "drivers/ps2.h"
+#include <stdint.h>
 
-enum MODE {
-    PS2_MODE_RESET,         // 复位/初始化
-    PS2_MODE_IDLE,          // 空闲等待
-    PS2_MODE_RECEIVE,       // 接收数据
-    PS2_MODE_SEND,          // 发送命令
-    PS2_MODE_ACK_WAIT,      // 等待ACK响应
-    PS2_MODE_ERROR,         // 错误处理
-    PS2_MODE_SELF_TEST,     // 自检
-    PS2_MODE_DIAGNOSTIC,    // 诊断模式
-    PS2_MODE_STREAM,        // 流模式（正常输入）
-    PS2_MODE_REMOTE,        // 远程模式（主机轮询）
-    PS2_MODE_DISABLED       // 禁用/休眠
-};
+uint8_t kbd_state = 0;
+#define SHIFT_DOWN  0x01
+#define CAPS_LOCK   0x02
 
 // Scancode to ASCII
 char scancode_ascii[] = {
@@ -79,7 +70,7 @@ void putchar(const char c, const int color) {
     if (c == '\n') {
         cursor_x = 0; cursor_y++;
     } else {
-        int pos = 2 * (cursor_y * VGA_WIDTH + cursor_x);
+        const int pos = 2 * (cursor_y * VGA_WIDTH + cursor_x);
         video[pos] = c;
         video[pos+1] = color; // function color (in 'void putchar(char c, int color)' --> int color)
         cursor_x++;
@@ -113,7 +104,7 @@ void puts(const char* s, const int color, ...) {
                 const char* str = va_arg(args, char*);
                 while (*str) putchar(*str++, color);
                 break;
-            default: ;
+            default: putchar('N', color);
         }
     }
 
