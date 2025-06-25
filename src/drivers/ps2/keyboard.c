@@ -37,17 +37,6 @@ enum MODE {
     PS2_MODE_DISABLED       // 禁用/休眠
 };
 
-// Read a byte from an I/O port
-static inline unsigned char inb(unsigned short port) {
-    unsigned char ret;
-    __asm__ volatile (
-        "inb %1, %0"
-        : "=a"(ret)
-        : "Nd"(port)
-    );
-    return ret;
-}
-
 // Scancode to ASCII
 char scancode_ascii[] = {
     0,  27, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b', // 0x0
@@ -104,6 +93,38 @@ void putchar(const char c, const int color) {
 }
 
 void puts(const char* s, const int color, ...) {
-    while (*s) putchar(*s++, color); 
+    va_list args;
+
+    va_start(args, s);
+
+    while (*s) {
+        // 初始化
+        *s++;
+
+        // 处理正常字符
+        if (*(s - 1) != '%') {
+            putchar(*(s - 1), color);
+            continue;
+        }
+        // 处理格式化字符与功能
+        switch (*s) {
+            // 字符串
+            case 's':
+                const char* str = va_arg(args, char*);
+                while (*str) putchar(*str++, color);
+                break;
+            default: ;
+        }
+    }
+
+    va_end(args);
 }
 
+int strcmp(const char* s1, const char* s2) {
+    while (*s1 && *s1 == *s2) {
+        // 如果字符相同则继续
+        s1++;
+        s2++;
+    }
+    return *s1 - *s2;
+}

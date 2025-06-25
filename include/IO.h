@@ -25,6 +25,8 @@
 #ifndef IO_H
 #define IO_H
 
+#include <stdarg.h>
+
 // Write a byte to an I/O port
 static inline void outb(unsigned short port, unsigned char val) {
     __asm__ volatile (

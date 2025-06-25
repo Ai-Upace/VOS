@@ -3,7 +3,7 @@ DD		:= dd
 CC		:= i686-elf-gcc
 LD		:= i686-elf-ld
 
-SRC_FILES := src/drivers/ps2/keyboard.c src/kernels/kernel.c src/kernels/io.c src/user/shell/shell.c
+SRC_FILES := src/drivers/ps2/keyboard.c src/kernels/kernel.c src/kernels/io.c src/user/shell/shell.c src/user/shell/command.c
 OBJ_FILES := build/keyboard.o build/kernel.o build/io.o build/shell.o
 INC_DIR := include
 

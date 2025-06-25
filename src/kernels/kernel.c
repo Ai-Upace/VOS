@@ -25,11 +25,17 @@
 #include "user/shell.h"
 
 void main() {  
-    puts("Hello World!", 0x7F);
+    // puts("Visual Operating System - Professional Edition.\n", 0x07);
+    // puts("Copyright (c) by Ai-Upace.\n", 0x07);
 
-    putchar(getchar(), 0x07); // Test getchar
+    char* s = "apple";
+    char* t = "banana";
 
-    shell(); 
+    if (strcmp(s,t)==0) {
+        puts("yes!", 0x07);
+    } else puts("no!", 0x07);
+
+    // shell();
 
     while (1) {
         asm volatile("hlt");
