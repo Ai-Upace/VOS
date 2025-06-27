@@ -32,7 +32,7 @@ void execute_command(char* input) {
     char* argv[MAX_ARGS]; // 参数数组
     int argc = 0;
 
-    // 1. 分割命令（避免strtok）
+    // 1. 分割命令
     char* token = input;
     while (*token && argc < MAX_ARGS-1) {
         // 跳过空格
@@ -66,7 +66,7 @@ void execute_command(char* input) {
 void shell() {
     char buf[128];
     while (1) {
-        puts("vos> ", 0x07);
+        puts("[VOS] $ ", 0x07);
         long unsigned int i = 0;
         char c;
         while ((c = getchar()) != '\n') {

@@ -13,21 +13,29 @@ CommandEntry commands_table[] = {
 };
 
 int ls_handler(int argc, char** argv) {
-    puts("Hello world!", 0x07);
+    puts("Hello world!\n", 0x07);
     return 0;
 }
 
 int cat_handler(int argc, char** argv) {
-    puts("Hello world!", 0x07);
+    puts("Hello world!\n", 0x07);
     return 0;
 }
 
 int dd_handler(int argc, char** argv) {
-    puts("Hello world!", 0x07);
+    char c;
+    while ((c = getchar()) != 'q') {
+        puts("Please enter", 0x07);
+        if (c == '\n') {
+            puts("Disk dump tool\n", 0x07);
+        } else {
+            putchar(c, 0x07);
+        }
+    }
     return 0;
 }
 
 int help_handler(int argc, char** argv) {
-    puts("Hello world!", 0x07);
+    puts("Hello world!\n", 0x07);
     return 0;
 }

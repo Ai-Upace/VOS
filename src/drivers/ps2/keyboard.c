@@ -1,85 +1,77 @@
-/*
- * Copyright (C) 2025 ~ ? Ai-Upace
- * Powered by Visual Operating System (VOS)
- * 
- * BY GPLv3 LICENSE:
- * - This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- * 
- * - cn v :
- * 版权所有 (C) 2025 ~ ? Ai-Upace
- * 基于 VOS (Visual Operating System) 开发
- * 
- * 根据 GPLv3 许可证：
- * - 本程序是自由软件：您可以根据 GNU 通用公共许可证的条款重新分发和/或修改它
- * - 由自由软件基金会发布的 GNU 通用公共许可证
- * 
- * 
- * END
- * <jntmngmhahayo@outlook.com>
- * <jntmngmhahayo@gmail.com>
- * 
- */
 #include "IO.h"
 #include "drivers/ps2.h"
 #include <stdint.h>
 
-uint8_t kbd_state = 0;
-#define SHIFT_DOWN  0x01
-#define CAPS_LOCK   0x02
+static int shift_pressed = 0;  // false
+static uint8_t kbd_state = 0;
+#define SHIFT_DOWN   0x01
+#define CAPS_LOCK    0x02
+#define CTRL_DOWN    0x04
+#define ALT_DOWN     0x08
 
 // Scancode to ASCII
 char scancode_ascii[] = {
-    0,  27, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b', // 0x0
-    '\t', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n',   // 0x10
-    0, 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', '`',           // 0x1E
-    0, '\\', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 0,             // 0x2C
-    '*', 0, ' ', 0,                                                           // 0x36
-    // more but future ...
+    0, 27, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',
+    '\t', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n',
+    0, 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', '\\',
+    0, 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 0,
+    0, 0, 0, 32, 0, 0, 0, 0
+};
+
+// Scancode to ASCII with Shift
+char scancode_shift[] = {
+    0, 27, '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '\b',
+    '\t', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', '\n',
+    0, 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':', '\"', '|',
+    0, 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', 0,
+    0, 0, 0, 32, 0, 0, 0, 0
 };
 
 // simple getchar function
-char getchar() {  
-    static int shift_pressed = 0;  
-    while (1) {  
-        // wait for a key press 
-        while ((inb(0x64) & 0x01) == 0) asm("pause");  
-        
-        unsigned char scancode = inb(0x60);  
-        
-        // Skip release events and control keys 
-        if (scancode & 0x80) continue;  
-        if (scancode == 0x2A || scancode == 0x36) {  
-            shift_pressed = 1;  
-            continue;  
-        }  
-        if (scancode >= sizeof(scancode_ascii) || !scancode_ascii[scancode]) {  
-            continue;  
-        }  
-        
-        // Handle shift key release
-        char c = scancode_ascii[scancode];  
-        return (shift_pressed && c >= 'a' && c <= 'z') ? c - 32 : c;  
-    }  
+int getchar() {
+    while (1) {
+        while ((inb(0x64) & 0x01) == 0) asm("pause");
+        unsigned char scancode = inb(0x60);
+
+        // Shift 按下/释放
+        if (scancode == 0x2A || scancode == 0x36) { kbd_state |= SHIFT_DOWN; continue; }
+        if (scancode == 0xAA || scancode == 0xB6) { kbd_state &= ~SHIFT_DOWN; continue; }
+        // Caps Lock 按下
+        if (scancode == 0x3A) { kbd_state ^= CAPS_LOCK; continue; }
+        // 跳过释放事件
+        if (scancode & 0x80) continue;
+        if (scancode >= sizeof(scancode_ascii) || !scancode_ascii[scancode]) continue;
+
+        char c;
+        // 判断是否为字母
+        if (scancode_ascii[scancode] >= 'a' && scancode_ascii[scancode] <= 'z') {
+            int upper = ((kbd_state & SHIFT_DOWN) ? 1 : 0) ^ ((kbd_state & CAPS_LOCK) ? 1 : 0);
+            c = upper ? scancode_shift[scancode] : scancode_ascii[scancode];
+        } else {
+            c = (kbd_state & SHIFT_DOWN) ? scancode_shift[scancode] : scancode_ascii[scancode];
+        }
+        if (c) return c;
+    }
 }
 
 static int cursor_x = 0, cursor_y = 0;
 
 void putchar(const char c, const int color) {
-    volatile char *video = (volatile char*)VGA_ADDRESS;
-    if (c == '\n') {
-        cursor_x = 0; cursor_y++;
+    volatile uint16_t *video = (volatile uint16_t*)VGA_ADDRESS; // 指向VGA显存的指针
+    if (c == '\n') { // 如果是换行符
+        cursor_x = 0;
+        cursor_y++;   // 光标移到下一行开头
     } else {
-        const int pos = 2 * (cursor_y * VGA_WIDTH + cursor_x);
-        video[pos] = c;
-        video[pos+1] = color; // function color (in 'void putchar(char c, int color)' --> int color)
-        cursor_x++;
+        const int pos = (cursor_y * VGA_WIDTH + cursor_x); // 计算显存中的位置（每字符2字节）
+        video[pos] = (color << 8) | c;
+        cursor_x++;             // 光标右移
     }
-    if (cursor_x >= VGA_WIDTH) {
-        cursor_x = 0; cursor_y++;
+    if (cursor_x >= VGA_WIDTH) { // 如果到达行末
+        cursor_x = 0;
+        cursor_y++;              // 换到下一行
     }
-    if (cursor_y >= VGA_HEIGHT) {
-        cursor_y = 0; // or scroll up, etc.
+    if (cursor_y >= VGA_HEIGHT) { // 如果到达屏幕底部
+        cursor_y = 0; // 这里可以实现滚屏，这里简单重置到顶部
     }
 }
 
@@ -99,10 +91,22 @@ void puts(const char* s, const int color, ...) {
         }
         // 处理格式化字符与功能
         switch (*s) {
+            case 'c':
+                const char* strc = va_arg(args, char*);
+                if (*strc == '\0') {
+                    putchar('^', color);
+                    putchar('@', color);
+                    putchar(*strc, color);
+                }
+                break;
             // 字符串
             case 's':
-                const char* str = va_arg(args, char*);
-                while (*str) putchar(*str++, color);
+                const char* strs = va_arg(args, char*);
+                while (*strs) putchar(*strs++, color);
+                break;
+            // 十六进制
+            case 'x':
+            case 'X':
                 break;
             default: putchar('N', color);
         }
