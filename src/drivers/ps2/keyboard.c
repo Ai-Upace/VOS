@@ -46,15 +46,23 @@ int getchar() {
         // 判断是否为字母
         if (scancode_ascii[scancode] >= 'a' && scancode_ascii[scancode] <= 'z') {
             int upper = ((kbd_state & SHIFT_DOWN) ? 1 : 0) ^ ((kbd_state & CAPS_LOCK) ? 1 : 0);
-            c = upper ? scancode_shift[scancode] : scancode_ascii[scancode];
+            c = (char)(upper ? scancode_shift[scancode] : scancode_ascii[scancode]);
         } else {
-            c = (kbd_state & SHIFT_DOWN) ? scancode_shift[scancode] : scancode_ascii[scancode];
+            c = (char)(kbd_state & SHIFT_DOWN ? scancode_shift[scancode] : scancode_ascii[scancode]);
         }
         if (c) return c;
     }
 }
 
 static int cursor_x = 0, cursor_y = 0;
+
+void update_cursor() {
+    const int pos = cursor_y * VGA_WIDTH + cursor_x; // 计算光标位置
+    outb(0x3D4, 14);
+    outb(0x3D5, pos >> 8);
+    outb(0x3D4, 15);
+    outb(0x3D5, pos);
+}
 
 void putchar(const char c, const int color) {
     volatile uint16_t *video = (volatile uint16_t*)VGA_ADDRESS; // 指向VGA显存的指针
@@ -71,8 +79,10 @@ void putchar(const char c, const int color) {
         cursor_y++;              // 换到下一行
     }
     if (cursor_y >= VGA_HEIGHT) { // 如果到达屏幕底部
-        cursor_y = 0; // 这里可以实现滚屏，这里简单重置到顶部
+        cursor_y = 0;
     }
+    // 更新光标位置
+    update_cursor();
 }
 
 void puts(const char* s, const int color, ...) {
@@ -92,11 +102,10 @@ void puts(const char* s, const int color, ...) {
         // 处理格式化字符与功能
         switch (*s) {
             case 'c':
-                const char* strc = va_arg(args, char*);
-                if (*strc == '\0') {
-                    putchar('^', color);
-                    putchar('@', color);
-                    putchar(*strc, color);
+                const int ch = va_arg(args, int);
+                putchar((char)ch, color);
+                if (ch == '\0') {
+                    putchar('^', color); putchar('@', color);
                 }
                 break;
             // 字符串

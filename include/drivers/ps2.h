@@ -8,6 +8,7 @@
 #define VGA_HEIGHT 25
 
 int  getchar();
+void update_cursor();
 void putchar(const char c, const int color);
 void puts(const char* s, const int color, ...);
 int  strcmp(const char* s1, const char* s2);

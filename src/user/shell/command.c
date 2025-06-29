@@ -25,8 +25,8 @@ int cat_handler(int argc, char** argv) {
 int dd_handler(int argc, char** argv) {
     char c;
     while ((c = getchar()) != 'q') {
-        puts("Please enter", 0x07);
-        if (c == '\n') {
+        puts("DD>\n", 0x07);
+        if (c == 'h') {
             puts("Disk dump tool\n", 0x07);
         } else {
             putchar(c, 0x07);
