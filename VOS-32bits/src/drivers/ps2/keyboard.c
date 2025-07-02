@@ -110,6 +110,7 @@ void puts(const char* s, const int color, ...) {
                     while (*strs) putchar(*strs++, color);
                     break;
                     // 十六进制
+                // future
                 case 'x':
                 case 'X':
                     break;
