@@ -86,39 +86,40 @@ void putchar(const char c, const int color) {
 }
 
 void puts(const char* s, const int color, ...) {
+    // 初始化可变参数
     va_list args;
 
     va_start(args, s);
 
     while (*s) {
-        // 初始化
-        *s++;
+        if (*s == '%') {
+            s++;
 
-        // 处理正常字符
-        if (*(s - 1) != '%') {
-            putchar(*(s - 1), color);
-            continue;
+            // 处理格式化字符与功能
+            switch (*s) {
+                case 'c':
+                    const int ch = va_arg(args, int);
+                    putchar((char)ch, color);
+                    if (ch == '\0') {
+                        putchar('^', color); putchar('@', color);
+                    }
+                    break;
+                    // 字符串
+                case 's':
+                    const char* strs = va_arg(args, char*);
+                    while (*strs) putchar(*strs++, color);
+                    break;
+                    // 十六进制
+                // future
+                case 'x':
+                case 'X':
+                    break;
+                default: putchar('N', color);
+            }
+        } else {
+            putchar(*s, color);  // 输出普通字符
         }
-        // 处理格式化字符与功能
-        switch (*s) {
-            case 'c':
-                const int ch = va_arg(args, int);
-                putchar((char)ch, color);
-                if (ch == '\0') {
-                    putchar('^', color); putchar('@', color);
-                }
-                break;
-            // 字符串
-            case 's':
-                const char* strs = va_arg(args, char*);
-                while (*strs) putchar(*strs++, color);
-                break;
-            // 十六进制
-            case 'x':
-            case 'X':
-                break;
-            default: putchar('N', color);
-        }
+        s++;
     }
 
     va_end(args);

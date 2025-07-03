@@ -20,6 +20,6 @@
  * <jntmngmhahayo@gmail.com>
  * 
  */
-// TODO: 8042 controller
-#include "IO.h"
-#include "cpu/c/8042.h"
+// TODO: 未来再搞，先搞好键盘驱动
+
+// empty
