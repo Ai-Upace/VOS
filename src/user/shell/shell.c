@@ -60,13 +60,13 @@ void execute_command(char* input) {
     }
 
     // 4. 未找到命令
-    puts("Unknown command: %s\n", 0x07 ,argv[0]);
+    kprintf("Unknown command: %s\n", 0x07 ,argv[0]);
 }
 
 void shell() {
     char buf[128];
     while (1) {
-        puts("[VOS] $ ", 0x07);
+        kprintf("[V-DOS] $ ", 0x07);
         long unsigned int i = 0;
         char c;
         while ((c = getchar()) != '\n') {

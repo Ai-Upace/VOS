@@ -9,6 +9,7 @@ INC_DIR := include
 
 CFLAGS	:= -ffreestanding -Wall -I$(INC_DIR) -Wextra -nostdlib
 LDFLAGS := -Ttext 0x10000 -nostdlib -e _start
+GRUB	:= -Ttext 0x100000 -nostdlib -e _start
 
 all: build/os.img
 
@@ -35,6 +36,11 @@ build/cmd.o: src/user/shell/command.c
 
 build/kernel.elf: build/kernel_entry.o $(OBJ_FILES)
 	$(LD) $(LDFLAGS) -o $@ build/kernel_entry.o $(OBJ_FILES)
+
+build/kernel_grub.elf: build/kernel_entry.o $(OBJ_FILES)
+	$(LD) $(GRUB) -o $@ build/kernel_entry.o $(OBJ_FILES)
+
+grub: build/kernel_grub.elf
 
 build/kernel.bin: build/kernel.elf
 	objcopy -O binary $< $@

@@ -13,21 +13,21 @@ CommandEntry commands_table[] = {
 };
 
 int ls_handler(int argc, char** argv) {
-    puts("Hello world!\n", 0x07);
+    kprintf("Hello world!\n", 0x07);
     return 0;
 }
 
 int cat_handler(int argc, char** argv) {
-    puts("Hello world!\n", 0x07);
+    kprintf("Hello world!\n", 0x07);
     return 0;
 }
 
 int dd_handler(int argc, char** argv) {
     char c;
     while ((c = getchar()) != 'q') {
-        puts("DD>\n", 0x07);
+        kprintf("DD>%c\n", 0x07, c);
         if (c == 'h') {
-            puts("Disk dump tool\n", 0x07);
+            kprintf("Disk dump tool\n", 0x07);
         } else {
             putchar(c, 0x07);
         }
@@ -36,6 +36,6 @@ int dd_handler(int argc, char** argv) {
 }
 
 int help_handler(int argc, char** argv) {
-    puts("Hello world!\n", 0x07);
+    kprintf("Hello world!\n", 0x07);
     return 0;
 }

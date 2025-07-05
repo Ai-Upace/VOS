@@ -85,7 +85,7 @@ void putchar(const char c, const int color) {
     update_cursor();
 }
 
-void puts(const char* s, const int color, ...) {
+void kprintf(const char* s, const int color, ...) {
     // 初始化可变参数
     va_list args;
 
