@@ -66,7 +66,7 @@ void execute_command(char* input) {
 void shell() {
     char buf[128];
     while (1) {
-        kprintf("[V-DOS] $ ", 0x07);
+        kprintf("[Visual-DOS] $ ", 0x07);
         long unsigned int i = 0;
         char c;
         while ((c = getchar()) != '\n') {

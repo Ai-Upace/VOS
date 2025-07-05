@@ -2,7 +2,6 @@
 #include "drivers/ps2.h"
 #include <stdint.h>
 
-static int shift_pressed = 0;  // false
 static uint8_t kbd_state = 0;
 #define SHIFT_DOWN   0x01
 #define CAPS_LOCK    0x02
@@ -46,8 +45,10 @@ int getchar() {
         // 判断是否为字母
         if (scancode_ascii[scancode] >= 'a' && scancode_ascii[scancode] <= 'z') {
             int upper = ((kbd_state & SHIFT_DOWN) ? 1 : 0) ^ ((kbd_state & CAPS_LOCK) ? 1 : 0);
+            // 设置大小写
             c = (char)(upper ? scancode_shift[scancode] : scancode_ascii[scancode]);
         } else {
+            // shift 键映射（非字母与 Caps Lock 状态）
             c = (char)(kbd_state & SHIFT_DOWN ? scancode_shift[scancode] : scancode_ascii[scancode]);
         }
         if (c) return c;

@@ -28,9 +28,9 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="adffc170-e5e4-43b5-8ce3-7ed7696e601f" name="更改" comment="Goodbye VOS 32bits! 再见了——VOS32位！">
+    <list default="true" id="adffc170-e5e4-43b5-8ce3-7ed7696e601f" name="更改" comment="V-DOS is coming!">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/drivers/ps2/keyboard.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/drivers/ps2/keyboard.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,6 +75,9 @@
         <entry key="$PROJECT_DIR$" value="RE_IMPORT" />
       </map>
     </option>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectApplicationVersion">
     <option name="ide" value="CLion" />
@@ -206,7 +209,7 @@
       <workItem from="1751371859966" duration="1282000" />
       <workItem from="1751615199685" duration="213000" />
       <workItem from="1751617283697" duration="4797000" />
-      <workItem from="1751694862085" duration="8000" />
+      <workItem from="1751694862085" duration="4094000" />
     </task>
     <task id="LOCAL-00001" summary="Goodbye VOS 32bits! 再见了——VOS32位！">
       <option name="closed" value="true" />
@@ -224,7 +227,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751372027393</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="V-DOS is coming!">
+      <option name="closed" value="true" />
+      <created>1751696014807</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1751696014807</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -248,6 +259,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Goodbye VOS 32bits! 再见了——VOS32位！" />
-    <option name="LAST_COMMIT_MESSAGE" value="Goodbye VOS 32bits! 再见了——VOS32位！" />
+    <MESSAGE value="V-DOS is coming!" />
+    <option name="LAST_COMMIT_MESSAGE" value="V-DOS is coming!" />
   </component>
 </project>
