@@ -3,7 +3,7 @@ DD		:= dd
 CC		:= i686-elf-gcc
 LD		:= i686-elf-ld
 
-SRC_FILES := src/drivers/ps2/keyboard.c src/kernels/kernel.c src/kernels/io.c src/user/shell/shell.c src/user/shell/command.c
+SRC_FILES := src/drivers/ps2/keyboard.c src/drivers/ps2/mouse.c src/kernels/kernel.c src/kernels/io.c src/user/shell/shell.c src/user/shell/command.c
 OBJ_FILES := build/keyboard.o build/kernel.o build/io.o build/shell.o build/cmd.o
 INC_DIR := include
 
@@ -20,6 +20,9 @@ build/kernel_entry.o: src/assembly/kernel_entry.asm
 	$(ASM) -f elf32 $< -o $@
 
 build/keyboard.o: src/drivers/ps2/keyboard.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+build/mouse.o: src/drivers/ps2/mouse.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 build/kernel.o: src/kernels/kernel.c

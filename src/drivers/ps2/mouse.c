@@ -21,5 +21,4 @@
  * 
  */
 // TODO: 未来再搞，先搞好键盘驱动
-
-// empty
+#include "../../../include/drivers/ps2.h"

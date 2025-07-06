@@ -1,12 +1,13 @@
 #include "IO.h"
 #include "drivers/ps2.h"
-#include <stdint.h>
 
 static uint8_t kbd_state = 0;
-#define SHIFT_DOWN   0x01
+#define L_SHIFT   0x01
 #define CAPS_LOCK    0x02
-#define CTRL_DOWN    0x04
+#define CTRL_DOWN    0x03
 #define ALT_DOWN     0x08
+
+struct KeyboardState key = {L_SHIFT, 0x00};
 
 // Scancode to ASCII
 char scancode_ascii[] = {
@@ -33,8 +34,8 @@ int getchar() {
         unsigned char scancode = inb(0x60);
 
         // Shift 按下/释放
-        if (scancode == 0x2A || scancode == 0x36) { kbd_state |= SHIFT_DOWN; continue; }
-        if (scancode == 0xAA || scancode == 0xB6) { kbd_state &= ~SHIFT_DOWN; continue; }
+        if (scancode == 0x2A || scancode == 0x36) { kbd_state |= key.modifiers; continue; }
+        if (scancode == 0xAA || scancode == 0xB6) { kbd_state &= ~key.modifiers; continue; }
         // Caps Lock 按下
         if (scancode == 0x3A) { kbd_state ^= CAPS_LOCK; continue; }
         // 跳过释放事件
@@ -44,12 +45,12 @@ int getchar() {
         char c;
         // 判断是否为字母
         if (scancode_ascii[scancode] >= 'a' && scancode_ascii[scancode] <= 'z') {
-            int upper = ((kbd_state & SHIFT_DOWN) ? 1 : 0) ^ ((kbd_state & CAPS_LOCK) ? 1 : 0);
+            int upper = ((kbd_state & key.modifiers) ? 1 : 0) ^ ((kbd_state & CAPS_LOCK) ? 1 : 0);
             // 设置大小写
             c = (char)(upper ? scancode_shift[scancode] : scancode_ascii[scancode]);
         } else {
             // shift 键映射（非字母与 Caps Lock 状态）
-            c = (char)(kbd_state & SHIFT_DOWN ? scancode_shift[scancode] : scancode_ascii[scancode]);
+            c = (char)(kbd_state & L_SHIFT ? scancode_shift[scancode] : scancode_ascii[scancode]);
         }
         if (c) return c;
     }
@@ -110,10 +111,15 @@ void kprintf(const char* s, const int color, ...) {
                     const char* strs = va_arg(args, char*);
                     while (*strs) putchar(*strs++, color);
                     break;
-                    // 十六进制
+                case 'd':
+                    // TODO: 实现整数输出
+                    break;
                 // future
                 case 'x':
                 case 'X':
+                    break;
+                case '%':
+                    putchar('%', color);
                     break;
                 default: putchar('N', color);
             }

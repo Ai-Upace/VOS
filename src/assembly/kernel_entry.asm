@@ -38,25 +38,35 @@ header_start:
     dd 0x00000003              ; 标志位（内存信息+模块对齐）  
     dd -(0x1BADB002 + 0x03)    ; 校验和  
 
+section .data
+empty_idt:
+    times 256 * 8 db 0         ; 初始化IDT为全0
+
 section .text  
 _start:  
     cli  ; 关中断  
 
-    ; 传递GRUB信息给C内核（按Multiboot标准）  
-    push ebx  ; 保存multiboot_info结构指针  
-    push eax  ; 保存魔数0x2BADB002  
+    lidt [empty_idt]  ; 加载空的IDT
+
 
     ; 设置基础栈指针  
-    mov esp, kernel_stack_top  
+    mov esp, kernel_stack_top
+
+    ; 按System V ABI传递参数
+        mov edi, eax
+        mov esi, ebx
 
     ; 调用C主函数  
     call main  
 
-    ; 如果内核返回（不该发生）  
-    hlt  
+    ; 休眠
+    cli
+.halt:
+    hlt
+    jmp .halt  ; 停止执行
 
 section .bss  
-align 16  
+align 32
 kernel_stack_bottom:  
     resb 16 * 1024  ; 16KB栈空间  
 kernel_stack_top:  
