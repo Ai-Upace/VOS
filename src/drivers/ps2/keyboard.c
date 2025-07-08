@@ -37,6 +37,13 @@ int getchar() {
         // Shift 按下/释放
         if (scancode == 0x2A || scancode == 0x36) { kbd_state |= key.bits.lshift; continue; }
         if (scancode == 0xAA || scancode == 0xB6) { kbd_state &= !key.bits.lshift; continue; }
+
+        if (scancode == 0xE0) {  // 扩展键
+            if (scancode == 0x38) {kbd_state |= key.bits.ralt; continue; } // 右Alt键
+            if (scancode == 0x1D) {kbd_state |= key.bits.rctrl; continue; } // 右Ctrl键
+            if (scancode == 0xB8) {kbd_state &= !key.bits.rctrl; continue; }
+            if (scancode == 0x9D) {kbd_state &= !key.bits.ralt; continue; }
+        }
         // Caps Lock 按下
         if (scancode == 0x3A) { kbd_state ^= key.modes.caps_lock; continue; }
         // 跳过释放事件
