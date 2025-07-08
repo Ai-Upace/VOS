@@ -4,6 +4,8 @@
 
 #include "../../../include/drivers/ps2.h"
 
+#include "IO.h"
+
 CommandEntry commands_table[] = {
     {"ls", ls_handler, "List files"},
     {"cat", cat_handler, "Show file"},

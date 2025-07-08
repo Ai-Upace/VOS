@@ -2,21 +2,37 @@
 #ifndef PS2_H
 #define PS2_H
 #include <stdint.h>
+#include <stdbool.h>
 
-#define VGA_ADDRESS 0xB8000
-#define VGA_WIDTH 80
-#define VGA_HEIGHT 25
-
-int  getchar();
-void update_cursor();
-void putchar(const char c, const int color);
-void kprintf(const char* s, const int color, ...);
-int  strcmp(const char* s1, const char* s2);
+int getchar();
 
 struct KeyboardState {
-    uint8_t modifiers; // Shift, Ctrl, Alt 等修饰键状态
-    uint8_t lock; // Caps Lock, Num Lock 等锁定键状态
-};
+    // 修饰键状态（1字节）
+    union {
+        uint8_t modifiers;
+        struct {
+            bool lshift : 1;
+            bool rshift : 1;
+            bool lctrl  : 1;
+            bool rctrl  : 1;
+            bool lalt   : 1;
+            bool ralt   : 1;
+            bool meta_l : 1;  // 预留Meta/Win键
+            bool meta_r : 1;
+        } bits;
+    };
+
+    // 锁定键状态
+    union {
+        uint8_t locks;
+        struct {
+            bool caps_lock : 1;
+            bool num_lock  : 1;
+            bool scr_lock  : 1;
+            uint8_t reserved  : 5;
+        } modes;
+    };
+} __attribute__((packed));  // 确保紧凑存储
 
 struct TextMode {
 

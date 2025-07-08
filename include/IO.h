@@ -24,4 +24,13 @@ static inline unsigned char inb(unsigned short port) {
     return ret;
 }
 
+#define VGA_ADDRESS 0xB8000
+#define VGA_WIDTH 80
+#define VGA_HEIGHT 25
+
+void update_cursor();
+void putchar(const char c, const int color);
+void kprintf(const char* s, const int color, ...);
+int  strcmp(const char* s1, const char* s2);
+
 #endif

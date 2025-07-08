@@ -24,6 +24,7 @@
 #include "drivers/ps2.h"
 #include "user/shell.h"
 #include "user/command.h"
+#include "IO.h"
 #include <stddef.h>
 
 #define MAX_ARGS 10
