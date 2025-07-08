@@ -6,6 +6,11 @@
 
 int getchar();
 
+#define KEY_UP 0
+#define KEY_DOWN 0
+#define KEY_LEFT 0
+#define KEY_RIGHT 0
+
 struct KeyboardState {
     // 修饰键状态（1字节）
     union {
