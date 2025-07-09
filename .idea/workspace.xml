@@ -29,10 +29,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="adffc170-e5e4-43b5-8ce3-7ed7696e601f" name="更改" comment="键盘头文件增加方向键宏定义，创建vos标准库！">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/drivers/ps2/keyboard.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/drivers/ps2/keyboard.c" afterDir="false" />
-    </list>
+    <list default="true" id="adffc170-e5e4-43b5-8ce3-7ed7696e601f" name="更改" comment="增加左右Ctrl, Alt逻辑" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -216,7 +213,7 @@
       <workItem from="1751936487449" duration="624000" />
       <workItem from="1751949238600" duration="850000" />
       <workItem from="1751957341493" duration="2866000" />
-      <workItem from="1751966006914" duration="4944000" />
+      <workItem from="1751966006914" duration="4997000" />
     </task>
     <task id="LOCAL-00001" summary="Goodbye VOS 32bits! 再见了——VOS32位！">
       <option name="closed" value="true" />
@@ -274,7 +271,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751972254318</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="增加左右Ctrl, Alt逻辑">
+      <option name="closed" value="true" />
+      <created>1751982619112</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1751982619112</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -303,6 +308,7 @@
     <MESSAGE value="键盘驱动完善，其中：&#10;1.使用结构体完善特殊键处理（逐渐替代原始方法）&#10;2.预留%d格式符，添加%%&#10;还有：VOS成功使用grub引导！Makefile增添grub单独编译（原make run是为了兼容软盘）" />
     <MESSAGE value="键盘驱动完善，其中：&#10;1.使用结构体+联合体完善特殊键处理（逐渐替代原始方法）&#10;将打印功能移至io.c" />
     <MESSAGE value="键盘头文件增加方向键宏定义，创建vos标准库！" />
-    <option name="LAST_COMMIT_MESSAGE" value="键盘头文件增加方向键宏定义，创建vos标准库！" />
+    <MESSAGE value="增加左右Ctrl, Alt逻辑" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加左右Ctrl, Alt逻辑" />
   </component>
 </project>
